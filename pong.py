@@ -8,6 +8,13 @@ FPS = 160
 WINDOWWIDTH = 400
 WINDOWHEIGHT = 300
 
+LINETHICKNESS = 10
+PADDLELENGTH = 50
+PADDLEOFFSET = 20
+
+BLACK = (0, 0, 0)
+WHITE = (255,255,255)
+
 def main():
     pygame.init()
 
@@ -18,6 +25,16 @@ def main():
 
     pygame.display.set_caption('PyPong')
 
+    # Initialize the starting positions
+    ballX = (WINDOWWIDTH - LINETHICKNESS) / 2
+    ballY = (WINDOWHEIGHT - LINETHICKNESS) / 2
+    p1Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
+    p2Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
+    
+    # Draw the rectangles
+    paddle1 = pygame.Rect(PADDLEOFFSET, p1Pos, LINETHICKNESS, PADDLELENGTH)
+    paddle2 = pygame.Rect(WINDOWWIDTH - PADDLEOFFSET - LINETHICKNESS, p2Pos, LINETHICKNESS, PADDLELENGTH)
+    ball = pygame.Rect(ballX, ballY, LINETHICKNESS, LINETHICKNESS)
     while True:     # main loop
         for event in pygame.event.get():
             if event.type == QUIT:
