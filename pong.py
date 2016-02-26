@@ -42,6 +42,11 @@ def drawBall(ball):
     pygame.draw.rect(DISPLAYSURF, WHITE, ball)
 
 
+def moveBall(ball, x, y):
+    ball.x += x
+    ball.y += y
+    return ball
+
 def main():
     pygame.init()
 
@@ -57,7 +62,10 @@ def main():
     ballY = (WINDOWHEIGHT - LINETHICKNESS) / 2
     p1Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
     p2Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
-    
+
+    # Direction the ball is moving
+    ballDirX = -1  # -1 = left; +1 = right
+    ballDirY = -1  # -1 = up; +1 = down
     # Create the rectangles
     paddle1 = pygame.Rect(PADDLEOFFSET, p1Pos, LINETHICKNESS, PADDLELENGTH)
     paddle2 = pygame.Rect(WINDOWWIDTH - PADDLEOFFSET - LINETHICKNESS, p2Pos, LINETHICKNESS, PADDLELENGTH)
@@ -79,6 +87,7 @@ def main():
         drawPaddle(paddle1)
         drawPaddle(paddle2)
         drawBall(ball)
+        ball = moveBall(ball, ballDirX, ballDirY)
 
         pygame.display.update()
         fpsclock.tick(FPS)
