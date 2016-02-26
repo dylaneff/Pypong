@@ -13,7 +13,34 @@ PADDLELENGTH = 50
 PADDLEOFFSET = 20
 
 BLACK = (0, 0, 0)
-WHITE = (255,255,255)
+WHITE = (255, 255, 255)
+
+# Draws the game arena
+def drawArena():
+    DISPLAYSURF.fill(BLACK)
+    # Outline of arena
+    pygame.draw.rect(DISPLAYSURF, WHITE, ((0, 0), (WINDOWWIDTH, WINDOWHEIGHT)), LINETHICKNESS*2)
+    # Center line
+    pygame.draw.line(DISPLAYSURF, WHITE, ((WINDOWWIDTH/2), 0), ((WINDOWWIDTH/2), WINDOWHEIGHT), (LINETHICKNESS/4))
+
+# Draws a paddle
+def drawPaddle(paddle):
+
+    # Prevent the paddle from moving below the playing area
+    if paddle.bottom > WINDOWHEIGHT - LINETHICKNESS:
+        paddle.top = LINETHICKNESS
+    # Prevent the paddle from moving above the playing area
+    if paddle.top < LINETHICKNESS:
+        paddle.top = LINETHICKNESS
+
+    # Draw the paddle
+    pygame.draw.rect(DISPLAYSURF, WHITE, paddle)
+
+
+# Draw the ball
+def drawBall(ball):
+    pygame.draw.rect(DISPLAYSURF, WHITE, ball)
+
 
 def main():
     pygame.init()
@@ -31,18 +58,30 @@ def main():
     p1Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
     p2Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
     
-    # Draw the rectangles
+    # Create the rectangles
     paddle1 = pygame.Rect(PADDLEOFFSET, p1Pos, LINETHICKNESS, PADDLELENGTH)
     paddle2 = pygame.Rect(WINDOWWIDTH - PADDLEOFFSET - LINETHICKNESS, p2Pos, LINETHICKNESS, PADDLELENGTH)
     ball = pygame.Rect(ballX, ballY, LINETHICKNESS, LINETHICKNESS)
+
+    # Draw the game objects
+    drawArena()
+    drawPaddle(paddle1)
+    drawPaddle(paddle2)
+    drawBall(ball)
+
     while True:     # main loop
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
-    pygame.display.update()
-    fpsclock.tick(FPS)
+        drawArena()
+        drawPaddle(paddle1)
+        drawPaddle(paddle2)
+        drawBall(ball)
+
+        pygame.display.update()
+        fpsclock.tick(FPS)
 
 if __name__ == '__main__':
     main()
