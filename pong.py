@@ -47,6 +47,18 @@ def moveBall(ball, x, y):
     ball.y += y
     return ball
 
+
+
+# Handle the collision of the ball and an edge
+def checkEdgeCollision(ball, x, y):
+    if ball.left == LINETHICKNESS or ball.right == (WINDOWWIDTH - LINETHICKNESS):
+        x *= -1
+    if ball.top == LINETHICKNESS or ball.bottom == (WINDOWHEIGHT - LINETHICKNESS):
+        y *= -1
+    return x, y
+
+
+
 def main():
     pygame.init()
 
@@ -88,6 +100,7 @@ def main():
         drawPaddle(paddle2)
         drawBall(ball)
         ball = moveBall(ball, ballDirX, ballDirY)
+        ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
 
         pygame.display.update()
         fpsclock.tick(FPS)
