@@ -28,7 +28,7 @@ def drawPaddle(paddle):
 
     # Prevent the paddle from moving below the playing area
     if paddle.bottom > WINDOWHEIGHT - LINETHICKNESS:
-        paddle.top = LINETHICKNESS
+        paddle.bottom = WINDOWHEIGHT - LINETHICKNESS
     # Prevent the paddle from moving above the playing area
     if paddle.top < LINETHICKNESS:
         paddle.top = LINETHICKNESS
@@ -57,7 +57,18 @@ def checkEdgeCollision(ball, x, y):
         y *= -1
     return x, y
 
-
+def enemyMove(paddle, ball, x):
+    if x == -1:
+        if paddle.centery > (WINDOWHEIGHT / 2):
+            paddle.centery -= 1
+        elif paddle.centery < (WINDOWHEIGHT / 2):
+            paddle.centery += 1
+    else:
+        if ball.centery > paddle.centery:
+            paddle.centery += 1
+        elif ball.centery < paddle.centery:
+            paddle.centery -= 1
+    return paddle
 
 def main():
     pygame.init()
@@ -89,11 +100,17 @@ def main():
     drawPaddle(paddle2)
     drawBall(ball)
 
+    pygame.mouse.set_visible(0)
+
     while True:     # main loop
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            # Mouse movement
+            elif event.type == MOUSEMOTION:
+                mousex, mousey = event.pos
+                paddle1.y = mousey
 
         drawArena()
         drawPaddle(paddle1)
@@ -101,6 +118,7 @@ def main():
         drawBall(ball)
         ball = moveBall(ball, ballDirX, ballDirY)
         ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
+        paddle2 = enemyMove(paddle2, ball, ballDirX)
 
         pygame.display.update()
         fpsclock.tick(FPS)
