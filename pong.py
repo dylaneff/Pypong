@@ -15,6 +15,7 @@ PADDLEOFFSET = 20
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+
 # Draws the game arena
 def drawArena():
     DISPLAYSURF.fill(BLACK)
@@ -22,6 +23,7 @@ def drawArena():
     pygame.draw.rect(DISPLAYSURF, WHITE, ((0, 0), (WINDOWWIDTH, WINDOWHEIGHT)), LINETHICKNESS*2)
     # Center line
     pygame.draw.line(DISPLAYSURF, WHITE, ((WINDOWWIDTH/2), 0), ((WINDOWWIDTH/2), WINDOWHEIGHT), (LINETHICKNESS/4))
+
 
 # Draws a paddle
 def drawPaddle(paddle):
@@ -48,7 +50,6 @@ def moveBall(ball, x, y):
     return ball
 
 
-
 # Handle the collision of the ball and an edge
 def checkEdgeCollision(ball, x, y):
     if ball.left == LINETHICKNESS or ball.right == (WINDOWWIDTH - LINETHICKNESS):
@@ -56,6 +57,7 @@ def checkEdgeCollision(ball, x, y):
     if ball.top == LINETHICKNESS or ball.bottom == (WINDOWHEIGHT - LINETHICKNESS):
         y *= -1
     return x, y
+
 
 # Handle the collision of the ball and paddle
 def checkPaddleCollision(paddle1, paddle2, ball, direction):
@@ -65,6 +67,7 @@ def checkPaddleCollision(paddle1, paddle2, ball, direction):
        ball.bottom > paddle2.top and ball.top < paddle2.bottom):
         direction *= -1
     return direction
+
 
 # Makes the enemy move
 def enemyMove(paddle, ball, x):
@@ -79,6 +82,7 @@ def enemyMove(paddle, ball, x):
         elif ball.centery < paddle.centery:
             paddle.centery -= 1
     return paddle
+
 
 def main():
     pygame.init()
@@ -133,6 +137,7 @@ def main():
 
         pygame.display.update()
         fpsclock.tick(FPS)
+
 
 if __name__ == '__main__':
     main()
