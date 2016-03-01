@@ -57,6 +57,16 @@ def checkEdgeCollision(ball, x, y):
         y *= -1
     return x, y
 
+# Handle the collision of the ball and paddle
+def checkPaddleCollision(paddle1, paddle2, ball, direction):
+    if (direction < 0 and ball.left == paddle1.right and
+       ball.bottom > paddle1.top and ball.top < paddle1.bottom) \
+       or (direction > 0 and ball.right == paddle2.left and
+       ball.bottom > paddle2.top and ball.top < paddle2.bottom):
+        direction *= -1
+    return direction
+
+# Makes the enemy move
 def enemyMove(paddle, ball, x):
     if x == -1:
         if paddle.centery > (WINDOWHEIGHT / 2):
@@ -118,6 +128,7 @@ def main():
         drawBall(ball)
         ball = moveBall(ball, ballDirX, ballDirY)
         ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
+        ballDirX = checkPaddleCollision(paddle1, paddle2, ball, ballDirX)
         paddle2 = enemyMove(paddle2, ball, ballDirX)
 
         pygame.display.update()
