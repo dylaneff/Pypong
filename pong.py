@@ -84,10 +84,31 @@ def enemyMove(paddle, ball, x):
     return paddle
 
 
+# Update Score
+def checkScore(paddle, ball, score, direction):
+    if ball.left == LINETHICKNESS:
+        score = 0
+    elif ball.right == WINDOWWIDTH-LINETHICKNESS:
+        score += 5
+    elif (direction < 0 and ball.left == paddle.right and
+          ball.bottom > paddle.top and ball.top < paddle.bottom):
+        score += 1
+
+    return score
+
+
+def displayScore(score):
+    resultSurf = FONT.render('Score = %s' %(score), True, WHITE)
+    resultRect = resultSurf.get_rect()
+    resultRect.topleft = (WINDOWWIDTH - 150, 25)
+    DISPLAYSURF.blit(resultSurf, resultRect)
+
 def main():
     pygame.init()
 
-    global DISPLAYSURF  # The main display surface
+    global DISPLAYSURF, FONT
+    FONT = pygame.font.Font("freesansbold.ttf", 20)
+
     fpsclock = pygame.time.Clock()  # Creates a clock object used to track FPS
 
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
@@ -99,6 +120,7 @@ def main():
     ballY = (WINDOWHEIGHT - LINETHICKNESS) / 2
     p1Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
     p2Pos = (WINDOWHEIGHT - PADDLELENGTH) / 2
+    score = 0
 
     # Direction the ball is moving
     ballDirX = -1  # -1 = left; +1 = right
@@ -132,9 +154,11 @@ def main():
         drawBall(ball)
         ball = moveBall(ball, ballDirX, ballDirY)
         ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
+        score = checkScore(paddle1, ball, score, ballDirX)
         ballDirX = checkPaddleCollision(paddle1, paddle2, ball, ballDirX)
         paddle2 = enemyMove(paddle2, ball, ballDirX)
 
+        displayScore(score)
         pygame.display.update()
         fpsclock.tick(FPS)
 
